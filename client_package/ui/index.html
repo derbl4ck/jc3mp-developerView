@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <title>JC3:MP Developerview</title>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <style>
+            body {
+                margin: 0px;
+                color: #fff;
+                font-size: 19px;
+                font-family: 'Open Sans', sans-serif;
+            }
+            .screen {
+                background-color: rgba(0, 0, 0, 0.28);
+                width: 100%;
+                height: 100%;
+            }
+            .info {
+                float: right;
+                padding-right: 20px;
+                padding-top: 20px;
+                width: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="screen">
+            <div class="info">
+                <div class="pos-x"></div>
+                <div class="pos-y"></div>
+                <div class="pos-z"></div>
+                <div class="rot-x"></div>
+                <div class="rot-y"></div>
+                <div class="rot-z"></div>
+            </div>
+            <div class="boxes"><div class="inner"></div></div>
+        </div>
+        <script src="jquery.js"></script>
+        <script>
+            $('.screen').hide();
+            let screen_visible = false;
+
+            const interval = setInterval(() => {
+                jcmp.CallEvent('developerview_GETupdateCore', 'get that shit');
+            }, 50);
+
+            jcmp.AddEvent('developerview_updateCore', (data) => {
+                data = JSON.parse(data);
+                $('.pos-x').html(`Pos X: ${data[0]}`);
+                $('.pos-y').html(`Pos Y: ${data[1]}`);
+                $('.pos-z').html(`Pos Z: ${data[2]}`);
+                $('.rot-x').html(`Rot X: ${data[3]}`);
+                $('.rot-y').html(`Rot Y: ${data[4]}`);
+                $('.rot-z').html(`Rot Z: ${data[5]}`);
+            });
+
+            jcmp.AddEvent('developerview_addBox', (data) => {
+                $('inner').append(`<div class="box">[${data['pkg']}] ${data['title']}: ${data['value']}</div>`);
+            });
+
+            jcmp.AddEvent('developerview_inner', (data) => {
+                $('boxes').append('<div class="inner"></div>');
+            });
+
+            jcmp.AddEvent('developerview_clear', (data) => {
+                $('.inner').remove();
+            });
+
+            document.addEventListener("keydown", (event) => {
+                console.log(event.which);
+                console.log(screen_visible);
+                if(event.which == 113) { //F2
+                    if(screen_visible) {
+                        screen_visible = false;
+                        $('.screen').hide();
+                    } else {
+                        screen_visible = true;
+                        $('.screen').show();
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
