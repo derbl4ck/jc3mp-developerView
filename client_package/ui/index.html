@@ -6,7 +6,7 @@
             body {
                 margin: 0px;
                 color: #fff;
-                font-size: 19px;
+                font-size: 14px;
                 font-family: 'Open Sans', sans-serif;
             }
             .screen {
@@ -20,10 +20,16 @@
                 padding-top: 20px;
                 width: 300px;
             }
+            .intro {
+                text-align: center;
+                font-size: 17px;
+                padding-top: 5px;
+            }
         </style>
     </head>
     <body>
         <div class="screen">
+            <div class="intro">Developer View</div>
             <div class="info">
                 <div class="pos-x"></div>
                 <div class="pos-y"></div>
@@ -49,12 +55,12 @@
 
             jcmp.AddEvent('developerview_updateCore', (data) => {
                 data = JSON.parse(data);
-                $('.pos-x').html(`Pos X: ${data[0]}`);
-                $('.pos-y').html(`Pos Y: ${data[1]}`);
-                $('.pos-z').html(`Pos Z: ${data[2]}`);
-                $('.rot-x').html(`Rot X: ${data[3]}`);
-                $('.rot-y').html(`Rot Y: ${data[4]}`);
-                $('.rot-z').html(`Rot Z: ${data[5]}`);
+                $('.pos-x').html(`Player Pos X: ${data[0]}`);
+                $('.pos-y').html(`Player Pos Y: ${data[1]}`);
+                $('.pos-z').html(`Player Pos Z: ${data[2]}`);
+                $('.rot-x').html(`Player Rot X: ${data[3]}`);
+                $('.rot-y').html(`Player Rot Y: ${data[4]}`);
+                $('.rot-z').html(`Player Rot Z: ${data[5]}`);
                 $('.cam-rot-x').html(`Camera Rot X: ${data[6]}`);
                 $('.cam-rot-y').html(`Camera Rot Y: ${data[7]}`);
                 $('.cam-rot-z').html(`Camera Rot Z: ${data[8]}`);
@@ -74,18 +80,16 @@
             });
 
             document.addEventListener("keydown", (event) => {
-                console.log(event.which);
-                console.log(screen_visible);
                 /**
-                *   Opens on F2 and 0
+                *   Opens on F2
                 */
-                if(event.which == 113 || event.which == 48) {
+                if(event.which == 113) {
                     if(screen_visible) {
                         screen_visible = false;
                         $('.screen').hide();
                     } else {
                         screen_visible = true;
-                        $('.screen').show();
+                        $('.screen').fadeIn('fast');
                     }
                 }
             });
