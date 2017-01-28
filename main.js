@@ -2,6 +2,7 @@
  * @overview package-developerview Main
  * @author Lukas 'derbl4ck' Berwanger
  * @copyright (c) derbl4ck
+ * @version 0.0.2
  * @license
  */
 
@@ -9,7 +10,7 @@
 
 let boxes = [];
 
-events.AddRemoteCallable('developerview_addDrawcall', (pkg, title, value) => {
+jcmp.events.AddRemoteCallable('developerview_addDrawcall', (pkg, title, value) => {
   if(pkg == '' || title == '') {
     console.log(`[developerview]\x1b[31mA Package requested to add a Drawcall without giving correct Informations!\x1b[0m`);
   } else {
@@ -19,6 +20,10 @@ events.AddRemoteCallable('developerview_addDrawcall', (pkg, title, value) => {
         value: value
       };
 
-      events.Call('developerview_draw', boxes);
+      let playersLength = jcmp.players.length;
+
+      for (let i = 0; i < playersLength; i++) {
+          jcmp.events.CallRemote('developerview_draw', jcmp.players[i], boxes);
+      }
   }
 });
