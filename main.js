@@ -2,7 +2,7 @@
  * @overview package-developerview Main
  * @author Lukas 'derbl4ck' Berwanger
  * @copyright (c) derbl4ck
- * @version 0.0.2
+ * @version 0.0.3
  * @license
  */
 

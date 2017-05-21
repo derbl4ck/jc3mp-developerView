@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>JC3:MP Developerview</title>
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
         <style>
             body {
                 margin: 0px;
@@ -25,26 +25,88 @@
                 font-size: 17px;
                 padding-top: 5px;
             }
+            .console {
+                max-width: 700px;
+                padding-left: 110px;
+                padding-top: 140px;
+                padding-bottom: 20px;
+                padding-right: 20px;
+            }
+            ul.tabs {
+			    margin: 0px;
+			    padding: 0px;
+			    list-style: none;
+                background-color: #313131;
+            }
+            ul.tabs li {
+                background: none;
+                color: #868686;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+            ul.tabs li.current {
+                background: #FF9800;
+                color: #ffffff;
+            }
+            .tab-content {
+                display: none;
+                background: #ededed;
+            }
+            .tab-content.current {
+                display: inherit;
+                min-height: 350px;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                max-height: 500px;
+            }
+            ul.client-log {
+                list-style: none;
+                padding-left: 0px;
+            }
+            .client-log li {
+                padding: 15px;
+                color: #5f5f5f;
+                border-bottom: 1px solid #ccc;
+            }
+            .client-log li:nth-child(odd) {
+                background: #dadada;
+            }
+            .console-trace {
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
-        <div class="screen">
-            <div class="intro">Developer View</div>
-            <div class="info">
-                <div class="pos-x"></div>
-                <div class="pos-y"></div>
-                <div class="pos-z"></div>
-                <div class="rot-x"></div>
-                <div class="rot-y"></div>
-                <div class="rot-z"></div>
-                <div class="cam-rot-x"></div>
-                <div class="cam-rot-y"></div>
-                <div class="cam-rot-z"></div>
-                <div class="players"></div>
+        <div class='screen'>
+            <div class='intro'>Developer View</div>
+            <div class='info'>
+                <div class='pos-x'></div>
+                <div class='pos-y'></div>
+                <div class='pos-z'></div>
+                <div class='rot-x'></div>
+                <div class='rot-y'></div>
+                <div class='rot-z'></div>
+                <div class='cam-rot-x'></div>
+                <div class='cam-rot-y'></div>
+                <div class='cam-rot-z'></div>
+                <div class='players'></div>
             </div>
-            <div class="boxes"><div class="inner"></div></div>
+            <div class='console'>
+                <ul class='tabs'>
+                    <li class='tab-link current' data-tab='tab-1'>Client Log (Errors)</li>
+                    <li class='tab-link' data-tab='tab-2'>Server Log (Soon)</li>
+                </ul>
+                <div id='tab-1' class='tab-content current'>
+                    <ul class='client-log'></ul>
+                </div>
+                <div id='tab-2' class='tab-content'>
+                    Coming Soon
+                </div>
+            </div>
+            <div class='boxes'><div class='inner'></div></div>
         </div>
-        <script src="jquery.js"></script>
+        <script src='jquery.js'></script>
         <script>
             $('.screen').hide();
             let screen_visible = false;
@@ -68,18 +130,23 @@
             });
 
             jcmp.AddEvent('developerview_addBox', (data) => {
-                $('inner').append(`<div class="box">[${data['pkg']}] ${data['title']}: ${data['value']}</div>`);
+                $('inner').append(`<div class='box'>[${data['pkg']}] ${data['title']}: ${data['value']}</div>`);
             });
 
             jcmp.AddEvent('developerview_inner', (data) => {
-                $('boxes').append('<div class="inner"></div>');
+                $('boxes').append('<div class=\'inner\'></div>');
             });
 
             jcmp.AddEvent('developerview_clear', (data) => {
                 $('.inner').remove();
             });
 
-            document.addEventListener("keydown", (event) => {
+            jcmp.AddEvent('developerview_addLog', (data) => {
+                data = JSON.parse(data);
+                $('.client-log').append(`<li>Error in File '${data['file']}' in line ${data['line']}<br>${data['err']}<br><div class='console-trace'>${data['trace']}</div></li>`);
+            });
+
+            document.addEventListener('keydown', (event) => {
                 /**
                 *   Opens on F2
                 */
@@ -92,6 +159,18 @@
                         $('.screen').fadeIn('fast');
                     }
                 }
+            });
+
+            $(document).ready(function(){
+	            $('ul.tabs li').click(function(){
+                    var tab_id = $(this).attr('data-tab');
+
+                    $('ul.tabs li').removeClass('current');
+                    $('.tab-content').removeClass('current');
+
+                    $(this).addClass('current');
+                    $('#'+tab_id).addClass('current');
+                });
             });
         </script>
     </body>

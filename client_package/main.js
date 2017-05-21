@@ -2,7 +2,7 @@
  * @overview package-developerview Main
  * @author Lukas 'derbl4ck' Berwanger
  * @copyright (c) derbl4ck
- * @version 0.0.2
+ * @version 0.0.3
  * @license
  */
 
@@ -33,4 +33,8 @@ jcmp.events.AddRemoteCallable('developerview_draw', boxes => {
   for (let box in boxes) {
     jcmp.ui.CallEvent('developerview_addBox', JSON.stringify(box));
   }
+});
+
+jcmp.events.Add('ScriptError', (file, line, err, trace) => {
+  jcmp.ui.CallEvent('developerview_addLog', JSON.stringify({ file: file, line: line, err: err, trace: trace }));
 });
